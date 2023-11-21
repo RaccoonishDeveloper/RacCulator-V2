@@ -1,0 +1,65 @@
+const keysContainer = document.querySelector(".calculator__keys");
+// get keys container
+const keys = Array.from(keysContainer.children);
+// split all the keys (keys container children) into an array
+const output = document.querySelector(".calculator__output");
+
+const numberKeys = keys.filter((key) => key.classList.contains("digit"));
+const operatorKeys = keys.filter((key) =>
+  key.classList.contains("calculator__operator")
+);
+// console.table(operatorKeys);
+const powerButton = document.querySelector("#key__pow");
+
+// filter array into 2 sub arrays, one for the numbers and one for the operators
+const deleteAll = document.querySelector("#key__ac");
+const deleteLast = document.querySelector("#key__ce");
+
+deleteAll.addEventListener("click", () => {
+  output.textContent = 0;
+});
+
+deleteLast.addEventListener("click", () => {
+  output.textContent = output.textContent.slice(0, -1);
+  if (output.textContent.slice(0, -1) === "") {
+    output.textContent = "0";
+  }
+});
+// added the delete buttons
+
+keys.forEach((key) => {
+  key.addEventListener("mousedown", () => {
+    key.classList.add("clicked");
+  });
+  key.addEventListener("mouseup", () => {
+    setTimeout(() => {
+      key.classList.remove("clicked");
+    }, 250); // delay in milliseconds
+  });
+});
+// add animation when keys are clicked
+
+numberKeys.forEach((number) => {
+  number.addEventListener("click", () => {
+    if (output.textContent == 0) {
+      output.textContent = " ";
+    }
+    output.textContent += number.textContent;
+  });
+});
+
+operatorKeys.forEach((operator) => {
+  operator.addEventListener("click", () => {
+    output.textContent += operator.textContent;
+  });
+});
+powerButton.addEventListener("click", () => {
+  output.textContent += "^";
+});
+
+function checkOperator(operatorKeys) {}
+
+//   puts the keys and operators on the screen
+// function calculation(numberKeys, operatorKeys) {}
+
+// enter number, enter operator, enter number, press equal button.
