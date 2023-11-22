@@ -14,18 +14,19 @@ const powerButton = document.querySelector("#key__pow");
 const decimalButton = document.querySelector("#key__decimal");
 
 // filter array into 2 sub arrays, one for the numbers and one for the operators
-const deleteAll = document.querySelector("#key__ac");
-const deleteLast = document.querySelector("#key__ce");
+const deleteAllButton = document.querySelector("#key__ac");
+const deleteButton = document.querySelector("#key__ce");
 
-deleteAll.addEventListener("click", () => {
+deleteAllButton.addEventListener("click", () => {
   output.textContent = 0;
-  array = [];
-  currentNumber = "";
+  lastNumber = "";
+  currentNumber = "0";
   currentOperator = "";
   history.textContent = "";
+  isNewNumber = false;
 });
 
-deleteLast.addEventListener("click", () => {
+deleteButton.addEventListener("click", () => {
   if (history.textContent !== "") {
     output.textContent = 0;
   }
