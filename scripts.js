@@ -70,28 +70,20 @@ operatorKeys.forEach((operator) => {
 
 numberKeys.forEach((number) => {
   number.addEventListener("click", () => {
-    if (number.textContent === ".") {
+    if (number.textContent === "." && output.textContent.includes(".")) {
+      return;
     }
-    if (output.textContent == 0) {
-      output.textContent = " ";
-    }
-    if (isNewNumber) {
-      output.textContent = "";
+    if (output.textContent === "0") {
+      output.textContent =
+        number.textContent === "." ? "0." : number.textContent;
+    } else if (isNewNumber) {
+      output.textContent = number.textContent;
       isNewNumber = false;
+    } else {
+      output.textContent += number.textContent;
     }
-    output.textContent += number.textContent;
     currentNumber = output.textContent;
     console.log("Current number is:" + currentNumber);
   });
 });
-
 // Number keys
-
-// decimalButton.addEventListener("click", () => {
-//   currentNumber = output.textContent;
-//   if (!currentNumber.includes(".")) {
-//     currentNumber += ".";
-//     output.textContent = currentNumber;
-//     console.log("Current number is:" + currentNumber);
-//   }
-// });
