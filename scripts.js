@@ -3,6 +3,7 @@ const keysContainer = document.querySelector(".calculator__keys");
 const keys = Array.from(keysContainer.children);
 // split all the keys (keys container children) into an array
 const output = document.querySelector(".calculator__output");
+const history = document.querySelector(".calculator__history");
 
 const numberKeys = keys.filter((key) => key.classList.contains("digit"));
 const operatorKeys = keys.filter((key) =>
@@ -17,9 +18,16 @@ const deleteLast = document.querySelector("#key__ce");
 
 deleteAll.addEventListener("click", () => {
   output.textContent = 0;
+  array = [];
+  currentNumber = "";
+  currentOperator = "";
+  history.textContent = "";
 });
 
 deleteLast.addEventListener("click", () => {
+  if (history.textContent !== "") {
+    output.textContent = 0;
+  }
   output.textContent = output.textContent.slice(0, -1);
   if (output.textContent.slice(0, -1) === "") {
     output.textContent = "0";
@@ -38,26 +46,39 @@ keys.forEach((key) => {
   });
 });
 // add animation when keys are clicked
+let lastNumber = "";
+let currentNumber = "";
+let currentOperator = "";
+let isNewNumber = false;
+
+operatorKeys.forEach((operator) => {
+  operator.addEventListener("click", () => {
+    if (currentOperator !== "") {
+      output.textContent = output.textContent.slice(0, -1);
+    }
+    lastNumber = currentNumber;
+    history.textContent = lastNumber + " " + operator.textContent.trim();
+    currentOperator = operator.textContent.trim();
+    currentNumber = "";
+    isNewNumber = true;
+  });
+});
 
 numberKeys.forEach((number) => {
   number.addEventListener("click", () => {
     if (output.textContent == 0) {
       output.textContent = " ";
     }
+    if (isNewNumber) {
+      output.textContent = "";
+      isNewNumber = false;
+    }
     output.textContent += number.textContent;
+    currentNumber = output.textContent;
   });
 });
 
-operatorKeys.forEach((operator) => {
-  operator.addEventListener("click", () => {
-    output.textContent += operator.textContent;
-  });
-});
-powerButton.addEventListener("click", () => {
-  output.textContent += "^";
-});
-
-function checkOperator(operatorKeys) {}
+// send text to the output
 
 //   puts the keys and operators on the screen
 // function calculation(numberKeys, operatorKeys) {}
