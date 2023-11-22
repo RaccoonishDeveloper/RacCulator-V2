@@ -27,7 +27,6 @@ deleteAll.addEventListener("click", () => {
 deleteLast.addEventListener("click", () => {
   if (history.textContent !== "") {
     output.textContent = 0;
-    // currentNumber = 0;
   }
   output.textContent = output.textContent.slice(0, -1);
   if (output.textContent.slice(0, -1) === "") {
@@ -54,13 +53,13 @@ let isNewNumber = false;
 
 operatorKeys.forEach((operator) => {
   operator.addEventListener("click", () => {
-    if (currentOperator !== "") {
-      output.textContent = output.textContent.slice(0, -1);
+    if (history.textContent) {
     }
     lastNumber = currentNumber;
+    console.log("last number is:" + lastNumber);
     history.textContent = lastNumber + " " + operator.textContent.trim();
     currentOperator = operator.textContent.trim();
-    currentNumber = "";
+
     isNewNumber = true;
   });
 });
@@ -76,6 +75,7 @@ numberKeys.forEach((number) => {
     }
     output.textContent += number.textContent;
     currentNumber = output.textContent;
+    console.log("Current number is:" + currentNumber);
   });
 });
 
