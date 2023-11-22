@@ -27,6 +27,7 @@ deleteAll.addEventListener("click", () => {
 deleteLast.addEventListener("click", () => {
   if (history.textContent !== "") {
     output.textContent = 0;
+    // currentNumber = 0;
   }
   output.textContent = output.textContent.slice(0, -1);
   if (output.textContent.slice(0, -1) === "") {
