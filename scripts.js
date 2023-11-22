@@ -53,11 +53,13 @@ let isNewNumber = false;
 
 operatorKeys.forEach((operator) => {
   operator.addEventListener("click", () => {
-    if (history.textContent) {
-    }
     lastNumber = currentNumber;
     console.log("last number is:" + lastNumber);
-    history.textContent = lastNumber + " " + operator.textContent.trim();
+    if (operator.textContent.trim() === "Xy") {
+      history.textContent = lastNumber + " " + "^";
+    } else {
+      history.textContent = lastNumber + " " + operator.textContent.trim();
+    }
     currentOperator = operator.textContent.trim();
 
     isNewNumber = true;
@@ -79,9 +81,4 @@ numberKeys.forEach((number) => {
   });
 });
 
-// send text to the output
-
-//   puts the keys and operators on the screen
-// function calculation(numberKeys, operatorKeys) {}
-
-// enter number, enter operator, enter number, press equal button.
+// Number key
