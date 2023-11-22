@@ -11,6 +11,7 @@ const operatorKeys = keys.filter((key) =>
 );
 // console.table(operatorKeys);
 const powerButton = document.querySelector("#key__pow");
+const decimalButton = document.querySelector("#key__decimal");
 
 // filter array into 2 sub arrays, one for the numbers and one for the operators
 const deleteAll = document.querySelector("#key__ac");
@@ -47,7 +48,7 @@ keys.forEach((key) => {
 });
 // add animation when keys are clicked
 let lastNumber = "";
-let currentNumber = "";
+let currentNumber = "0";
 let currentOperator = "";
 let isNewNumber = false;
 
@@ -65,9 +66,12 @@ operatorKeys.forEach((operator) => {
     isNewNumber = true;
   });
 });
+// operator keys
 
 numberKeys.forEach((number) => {
   number.addEventListener("click", () => {
+    if (number.textContent === ".") {
+    }
     if (output.textContent == 0) {
       output.textContent = " ";
     }
@@ -81,4 +85,13 @@ numberKeys.forEach((number) => {
   });
 });
 
-// Number key
+// Number keys
+
+// decimalButton.addEventListener("click", () => {
+//   currentNumber = output.textContent;
+//   if (!currentNumber.includes(".")) {
+//     currentNumber += ".";
+//     output.textContent = currentNumber;
+//     console.log("Current number is:" + currentNumber);
+//   }
+// });
