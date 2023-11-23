@@ -52,6 +52,7 @@ let lastNumber = "";
 let currentNumber = "0";
 let currentOperator = "";
 let isNewNumber = false;
+let result;
 
 operatorKeys.forEach((operator) => {
   operator.addEventListener("click", () => {
@@ -92,38 +93,41 @@ numberKeys.forEach((number) => {
 const equal = document.querySelector("#key__equals");
 equal.addEventListener("click", () => {
   getResult(lastNumber, currentOperator, currentNumber);
-  // displayResult(getResult(), currentOperator);
 });
 
-function getResult(previoustNumber, operator, currentNumber) {
-  previoustNumber = parseFloat(lastNumber);
-  currentNumber = parseFloat(currentNumber);
+function getResult(a, operator, b) {
+  a = parseFloat(lastNumber);
+  b = parseFloat(currentNumber);
 
   switch (operator) {
     case "+":
-      result = previoustNumber + currentNumber;
+      result = a + b;
       break;
     case "-":
-      result = previoustNumber - currentNumber;
+      result = a - b;
       break;
     case "x":
-      result = previoustNumber * currentNumber;
+      result = a * b;
       break;
     case "Xy":
-      result = Math.pow(previoustNumber, currentNumber);
+      result = Math.pow(a, b);
       break;
     case "÷":
-      result = previoustNumber / currentNumber;
+      result = a / b;
       break;
     default:
       console.log("Unknown operator: " + operator);
   }
 
-  let displayOperator = operator;
-  if (operator === "Xy") {
-    displayOperator = "^";
-  }
+  // let displayOperator = operator;
+  // if (operator === "Xy") {
+  //   displayOperator = "^";
+  // }
+
   result = result.toFixed(2);
+  result = parseFloat(result);
   console.log(result);
+  return result;
 }
+
 // Replace "Xy" with "^" for display
