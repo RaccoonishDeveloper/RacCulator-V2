@@ -93,6 +93,7 @@ numberKeys.forEach((number) => {
 const equal = document.querySelector("#key__equals");
 equal.addEventListener("click", () => {
   getResult(lastNumber, currentOperator, currentNumber);
+  displayResult(result);
 });
 
 function getResult(a, operator, b) {
@@ -128,6 +129,11 @@ function getResult(a, operator, b) {
   result = parseFloat(result);
   console.log(result);
   return result;
+}
+function displayResult(result) {
+  history.textContent =
+    lastNumber + " " + currentOperator + " " + currentNumber + " =";
+  output.textContent = result;
 }
 
 // Replace "Xy" with "^" for display
