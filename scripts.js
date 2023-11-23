@@ -118,10 +118,12 @@ function getResult(previoustNumber, operator, currentNumber) {
     default:
       console.log("Unknown operator: " + operator);
   }
-}
 
-let displayOperator = operator;
-if (operator === "Xy") {
-  displayOperator = "^";
+  let displayOperator = operator;
+  if (operator === "Xy") {
+    displayOperator = "^";
+  }
+  result = result.toFixed(2);
+  console.log(result);
 }
 // Replace "Xy" with "^" for display
