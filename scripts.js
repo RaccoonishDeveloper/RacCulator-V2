@@ -88,3 +88,40 @@ numberKeys.forEach((number) => {
   });
 });
 // Number keys
+
+const equal = document.querySelector("#key__equals");
+equal.addEventListener("click", () => {
+  getResult(lastNumber, currentOperator, currentNumber);
+  // displayResult(getResult(), currentOperator);
+});
+
+function getResult(previoustNumber, operator, currentNumber) {
+  previoustNumber = parseFloat(lastNumber);
+  currentNumber = parseFloat(currentNumber);
+
+  switch (operator) {
+    case "+":
+      result = previoustNumber + currentNumber;
+      break;
+    case "-":
+      result = previoustNumber - currentNumber;
+      break;
+    case "x":
+      result = previoustNumber * currentNumber;
+      break;
+    case "Xy":
+      result = Math.pow(previoustNumber, currentNumber);
+      break;
+    case "÷":
+      result = previoustNumber / currentNumber;
+      break;
+    default:
+      console.log("Unknown operator: " + operator);
+  }
+}
+
+let displayOperator = operator;
+if (operator === "Xy") {
+  displayOperator = "^";
+}
+// Replace "Xy" with "^" for display
