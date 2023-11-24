@@ -2,28 +2,31 @@ const keysContainer = document.querySelector(".calculator__keys");
 // get keys container
 const keys = Array.from(keysContainer.children);
 // split all the keys (keys container children) into an array
-const output = document.querySelector(".calculator__output");
-const history = document.querySelector(".calculator__history");
-
 const numberKeys = keys.filter((key) => key.classList.contains("digit"));
 const operatorKeys = keys.filter((key) =>
   key.classList.contains("calculator__operator")
 );
-// console.table(operatorKeys);
-const powerButton = document.querySelector("#key__pow");
-const decimalButton = document.querySelector("#key__decimal");
+const output = document.querySelector(".calculator__output");
+const history = document.querySelector(".calculator__history");
 
-// filter array into 2 sub arrays, one for the numbers and one for the operators
+const equal = document.querySelector("#key__equals");
 const deleteAllButton = document.querySelector("#key__ac");
 const deleteButton = document.querySelector("#key__ce");
 
+let firstOperand = 0;
+let secondOperand = 0;
+let currentOperator = null;
+let result = 0;
+let isNewNumber = false;
+output.textContent = result;
+
 deleteAllButton.addEventListener("click", () => {
   output.textContent = 0;
-  lastNumber = "";
-  currentNumber = "0";
-  currentOperator = "";
   history.textContent = "";
-  isNewNumber = false;
+  firstOperand = 0;
+  secondOperand = 0;
+  currentOperator = null;
+  result = 0;
 });
 
 deleteButton.addEventListener("click", () => {
@@ -35,70 +38,75 @@ deleteButton.addEventListener("click", () => {
     output.textContent = "0";
   }
 });
-// added the delete buttons
-
-keys.forEach((key) => {
-  key.addEventListener("mousedown", () => {
-    key.classList.add("clicked");
-  });
-  key.addEventListener("mouseup", () => {
-    setTimeout(() => {
-      key.classList.remove("clicked");
-    }, 250); // delay in milliseconds
-  });
-});
-// add animation when keys are clicked
-let lastNumber = "";
-let currentNumber = "0";
-let currentOperator = "";
-let isNewNumber = false;
-let result;
-
-operatorKeys.forEach((operator) => {
-  operator.addEventListener("click", () => {
-    lastNumber = currentNumber;
-    console.log("last number is:" + lastNumber);
-    if (operator.textContent.trim() === "Xy") {
-      history.textContent = lastNumber + " " + "^";
-    } else {
-      history.textContent = lastNumber + " " + operator.textContent.trim();
-    }
-    currentOperator = operator.textContent.trim();
-
-    isNewNumber = true;
-  });
-});
-// operator keys
 
 numberKeys.forEach((number) => {
   number.addEventListener("click", () => {
+    if (isNewNumber) {
+      output.textContent = "";
+      isNewNumber = false;
+    }
     if (number.textContent === "." && output.textContent.includes(".")) {
       return;
     }
-    if (output.textContent === "0") {
-      output.textContent =
-        number.textContent === "." ? "0." : number.textContent;
-    } else if (isNewNumber) {
-      output.textContent = number.textContent;
-      isNewNumber = false;
-    } else {
-      output.textContent += number.textContent;
+    if (output.textContent === "0" && number.textContent !== ".") {
+      output.textContent = "";
     }
-    currentNumber = output.textContent;
-    console.log("Current number is:" + currentNumber);
+
+    output.textContent += number.textContent;
+    if (currentOperator !== null && firstOperand != 0) {
+      secondOperand = output.textContent;
+      console.log("secondOperand is: " + secondOperand);
+    }
+  });
+  updateDisplay(result, firstOperand, currentOperator, secondOperand);
+});
+
+operatorKeys.forEach((operator) => {
+  operator.addEventListener("click", () => {
+    isNewNumber = true;
+    if (currentOperator === null) {
+      firstOperand = output.textContent;
+      output.textContent = "";
+    }
+
+    console.log("firstOperand is: " + firstOperand);
+    currentOperator = operator.textContent.trim();
+    console.log("Operator is: " + currentOperator);
+    updateDisplay(result, firstOperand, currentOperator, secondOperand);
   });
 });
-// Number keys
 
-const equal = document.querySelector("#key__equals");
+function updateDisplay(result = 0, operand1, operator, operand2) {
+  let displayOperator = operator;
+  if (operator === "Xy") {
+    displayOperator = "^";
+  }
+  if (operand1 && operand2 && result) {
+    history.textContent =
+      operand1 + " " + displayOperator + " " + operand2 + " =";
+    output.textContent = result;
+  } else if (operand1 && operand2) {
+    history.textContent = operand1 + " " + displayOperator;
+    output.textContent = operand2;
+  } else if (operand1 && operator) {
+    history.textContent = operand1 + " " + operator;
+    output.textContent = operand1;
+  } else {
+    output.textContent = result;
+  }
+}
+
+updateDisplay(result, firstOperand, currentOperator, secondOperand);
+
 equal.addEventListener("click", () => {
-  getResult(lastNumber, currentOperator, currentNumber);
-  displayResult(result);
+  secondOperand = output.textContent;
+  result = getResult(firstOperand, currentOperator, secondOperand);
+  updateDisplay(result, firstOperand, currentOperator, secondOperand);
 });
 
 function getResult(a, operator, b) {
-  a = parseFloat(lastNumber);
-  b = parseFloat(currentNumber);
+  a = parseFloat(firstOperand);
+  b = parseFloat(secondOperand);
 
   switch (operator) {
     case "+":
@@ -119,21 +127,8 @@ function getResult(a, operator, b) {
     default:
       console.log("Unknown operator: " + operator);
   }
-
-  // let displayOperator = operator;
-  // if (operator === "Xy") {
-  //   displayOperator = "^";
-  // }
-
   result = result.toFixed(2);
   result = parseFloat(result);
   console.log(result);
   return result;
 }
-function displayResult(result) {
-  history.textContent =
-    lastNumber + " " + currentOperator + " " + currentNumber + " =";
-  output.textContent = result;
-}
-
-// Replace "Xy" with "^" for display
