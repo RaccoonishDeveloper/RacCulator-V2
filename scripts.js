@@ -6,107 +6,121 @@ const numberKeys = keys.filter((key) => key.classList.contains("digit"));
 const operatorKeys = keys.filter((key) =>
   key.classList.contains("calculator__operator")
 );
-const output = document.querySelector(".calculator__output");
-const history = document.querySelector(".calculator__history");
+const currentDisplay = document.querySelector(".calculator__currentDisplay");
+const lastDisplay = document.querySelector(".calculator__lastDisplay");
 
-const equal = document.querySelector("#key__equals");
+const equalButton = document.querySelector("#key__equals");
 const deleteAllButton = document.querySelector("#key__ac");
 const deleteButton = document.querySelector("#key__ce");
+const decimalButton = document.querySelector("#key__decimal");
 
-let firstOperand = 0;
-let secondOperand = 0;
+let operand1 = null;
+let operand2 = null;
 let currentOperator = null;
-let result = 0;
-let isNewNumber = false;
-output.textContent = result;
+let result = null;
+let reset = false;
+currentDisplay.textContent = "0";
+// Event Listeners
+deleteAllButton.addEventListener("click", clearAll);
 
-deleteAllButton.addEventListener("click", () => {
-  output.textContent = 0;
-  history.textContent = "";
-  firstOperand = 0;
-  secondOperand = 0;
-  currentOperator = null;
-  result = 0;
+deleteButton.addEventListener("click", deleteLast);
+
+decimalButton.addEventListener("click", setDecimal);
+
+numberKeys.forEach((numberKey) => {
+  numberKey.addEventListener("click", () => setNumber(numberKey.textContent));
 });
 
-deleteButton.addEventListener("click", () => {
-  if (history.textContent !== "") {
-    output.textContent = 0;
+operatorKeys.forEach((operatorKey) => {
+  operatorKey.addEventListener("click", () =>
+    setOperator(operatorKey.textContent)
+  );
+});
+
+equalButton.addEventListener("click", calculate);
+
+// Functions
+
+function clearAll() {
+  currentDisplay.textContent = "0";
+  lastDisplay.textContent = "";
+  operand1 = null;
+  operand2 = null;
+  operator = null;
+  result = null;
+}
+
+function deleteLast() {
+  if (currentDisplay.textContent === "Cannot divide by zero") {
+    currentDisplay.textContent = "0";
   }
-  output.textContent = output.textContent.slice(0, -1);
-  if (output.textContent.slice(0, -1) === "") {
-    output.textContent = "0";
+
+  if (lastDisplay.textContent !== "") {
+    currentDisplay.textContent = "0";
   }
-});
-
-numberKeys.forEach((number) => {
-  number.addEventListener("click", () => {
-    if (isNewNumber) {
-      output.textContent = "";
-      isNewNumber = false;
-    }
-    if (number.textContent === "." && output.textContent.includes(".")) {
-      return;
-    }
-    if (output.textContent === "0" && number.textContent !== ".") {
-      output.textContent = "";
-    }
-
-    output.textContent += number.textContent;
-    if (currentOperator !== null && firstOperand != 0) {
-      secondOperand = output.textContent;
-      console.log("secondOperand is: " + secondOperand);
-    }
-  });
-  updateDisplay(result, firstOperand, currentOperator, secondOperand);
-});
-
-operatorKeys.forEach((operator) => {
-  operator.addEventListener("click", () => {
-    isNewNumber = true;
-    if (currentOperator === null) {
-      firstOperand = output.textContent;
-      output.textContent = "";
-    }
-
-    console.log("firstOperand is: " + firstOperand);
-    currentOperator = operator.textContent.trim();
-    console.log("Operator is: " + currentOperator);
-    updateDisplay(result, firstOperand, currentOperator, secondOperand);
-  });
-});
-
-function updateDisplay(result = 0, operand1, operator, operand2) {
-  let displayOperator = operator;
-  if (operator === "Xy") {
-    displayOperator = "^";
-  }
-  if (operand1 && operand2 && result) {
-    history.textContent =
-      operand1 + " " + displayOperator + " " + operand2 + " =";
-    output.textContent = result;
-  } else if (operand1 && operand2) {
-    history.textContent = operand1 + " " + displayOperator;
-    output.textContent = operand2;
-  } else if (operand1 && operator) {
-    history.textContent = operand1 + " " + operator;
-    output.textContent = operand1;
-  } else {
-    output.textContent = result;
+  currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
+  if (currentDisplay.textContent === "") {
+    currentDisplay.textContent = "0";
   }
 }
 
-updateDisplay(result, firstOperand, currentOperator, secondOperand);
+function clearDisplay() {
+  currentDisplay.textContent = "";
+  reset = false;
+}
 
-equal.addEventListener("click", () => {
-  secondOperand = output.textContent;
-  result = getResult(firstOperand, currentOperator, secondOperand);
-  updateDisplay(result, firstOperand, currentOperator, secondOperand);
-});
+function setNumber(number) {
+  if (currentDisplay.textContent === "0" || reset) clearDisplay();
+  currentDisplay.textContent += number;
+  console.log("current number: " + currentDisplay.textContent);
+}
+function setDecimal() {
+  if (
+    decimalButton.textContent === "." &&
+    currentDisplay.textContent.includes(".")
+  ) {
+    return;
+  }
+
+  if (currentDisplay.textContent === "") {
+    currentDisplay.textContent = "0";
+  }
+
+  currentDisplay.textContent += decimalButton.textContent;
+}
+
+function setOperator(operator) {
+  operator = operator.trim();
+  if (currentOperator !== null) calculate();
+  operand1 = currentDisplay.textContent;
+  currentOperator = operator;
+  let displayOperator = currentOperator;
+  if (currentOperator === "Xy") {
+    displayOperator = "^";
+  }
+  lastDisplay.textContent = `${operand1} ${displayOperator}`;
+  console.log("Current operator: " + displayOperator);
+  reset = true;
+}
+function calculate() {
+  if (currentOperator === null || reset) return;
+  if (currentOperator === "÷" && currentDisplay.textContent === "0") {
+    currentDisplay.textContent = "Cannot divide by zero";
+    return;
+  }
+  let displayOperator = currentOperator;
+  if (currentOperator === "Xy") {
+    displayOperator = "^";
+  }
+  operand2 = currentDisplay.textContent;
+  currentDisplay.textContent = getResult(operand1, currentOperator, operand2);
+  lastDisplay.textContent = `${operand1} ${displayOperator} ${operand2} =`;
+  currentOperator = null;
+}
 
 function getResult(a, operator, b) {
-  a = parseFloat(firstOperand);
-  b = parseFloat(secondOperand);
+  a = parseFloat(a);
+  b = parseFloat(b);
 
   switch (operator) {
     case "+":
