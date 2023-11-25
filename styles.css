@@ -102,15 +102,17 @@ h2 {
   justify-content: flex-end;
   align-items: flex-end;
   font-weight: bold;
-  font-size: 36px;
+  font-size: 29px;
 }
 .calculator__lastDisplay {
   font-weight: bold;
   color: var(--accent);
-  font-size: 24px;
+  font-size: 20px;
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+  /* line-break:strict; */
+  text-align: right;
 }
 
 .keys__wrapper {
@@ -138,7 +140,7 @@ h2 {
   font-size: 40px;
   font-weight: bold;
 }
-#key__equals {
+#equals {
   grid-column: span 2;
   color: var(--accent);
 }

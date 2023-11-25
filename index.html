@@ -36,49 +36,36 @@
         </div>
         <div class="keys__wrapper">
           <div class="calculator__keys">
-            <button class="calculator__key calculator__operator" id="key__pow">
-              X<sup>y</sup>
-            </button>
-            <button class="calculator__key" id="key__ce">CE</button>
-            <button class="calculator__key" id="key__ac">AC</button>
+            <button data-operator="^" class="calculator__key calculator__operator" id="pow">^</button>
+            <button class="calculator__key" id="ce">CE</button>
+            <button class="calculator__key" id="ac">AC</button>
             <button
+              data-operator="÷"
               class="calculator__key calculator__operator"
-              id="key__divide"
-            >
-              ÷
-            </button>
-            <button class="calculator__key digit" id="key__seven">7</button>
-            <button class="calculator__key digit" id="key__eight">8</button>
-            <button class="calculator__key digit" id="key__nine">9</button>
+              id="divide">÷</button>
+            <button class="calculator__key digit" id="7">7</button>
+            <button class="calculator__key digit" id="8">8</button>
+            <button class="calculator__key digit" id="9">9</button>
             <button
+              data-operator="x"
               class="calculator__key calculator__operator"
-              id="key__multiply"
-            >
-              x
-            </button>
-            <button class="calculator__key digit" id="key__four">4</button>
-            <button class="calculator__key digit" id="key__five">5</button>
-            <button class="calculator__key digit" id="key__six">6</button>
+              id="multiply">x</button>
+            <button class="calculator__key digit" id="4">4</button>
+            <button class="calculator__key digit" id="5">5</button>
+            <button class="calculator__key digit" id="6">6</button>
             <button
+              data-operator="-"
               class="calculator__key calculator__operator"
-              id="key__subtract"
-            >
-              -
-            </button>
-            <button class="calculator__key digit" id="key__one">1</button>
-            <button class="calculator__key digit" id="key__two">2</button>
-            <button class="calculator__key digit" id="key__three">3</button>
-            <button class="calculator__key calculator__operator" id="key__add">
-              +
-            </button>
-            <button class="calculator__key digit" id="key__zero">0</button>
-            <button class="calculator__key" id="key__decimal">.</button>
+              id="subtract">-</button>
+            <button class="calculator__key digit" id="1">1</button>
+            <button class="calculator__key digit" id="2">2</button>
+            <button class="calculator__key digit" id="3">3</button>
+            <button data-operator="+" class="calculator__key calculator__operator" id="add">+</button>
+            <button class="calculator__key digit" id="0">0</button>
+            <button class="calculator__key" id="decimal">.</button>
             <button
               class="calculator__key calculator__key--enter"
-              id="key__equals"
-            >
-              =
-            </button>
+              id="equals">=</button>
           </div>
         </div>
         <div class="copyright__wrapper">
